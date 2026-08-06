@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+
+	pb "github.com/ritesh-karankal/grpc-demo/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -11,17 +13,20 @@ const (
 )
 
 func main() {
-	conn, err := grpc.Dial("localhost"+port, grpc.WithTransport)
+	conn, err := grpc.Dial("localhost"+port, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 
 	defer conn.Close()
 
-	// client := pb.NewGreetServiceClient(conn)
+	client := pb.NewGreetServiceClient(conn)
 
 	// names := &pb.NamesList{
-	// 	Names: []string{"Rik", "Alice", "Bob"}
+	// 	Names: []string{"Rik", "Alice", "Bob"},
 	// }
+
+	callSayHello(client)
+	
 }
 
